@@ -18,7 +18,7 @@ ArrayList<T>::ArrayList(int Length, T *Buffer)
 template <typename T>
 ArrayList<T>::~ArrayList()
 {
-    std::cout << "ì†Œë©¸ìž í˜¸ì¶œ" << std::endl;
+    std::cout << "¼Ò¸êÀÚ È£Ãâ" << std::endl;
     free(Buffer);
 }
 
@@ -26,6 +26,19 @@ template <typename T>
 void ArrayList<T>::ChangeBufferSize()
 {
     BufferSize = _msize(Buffer) - ElementSize;
+}
+
+template <typename T>
+T &ArrayList<T>::operator[](int index)
+{
+    if (index < 0 || index >= Length)
+    {
+        throw std::exception();
+    }
+    else
+    {
+        return *(this->Buffer + index);
+    }
 }
 
 template <typename T>
@@ -66,29 +79,6 @@ ArrayList<T> &ArrayList<T>::operator+=(const ArrayList<T> &ref)
     Length += ref.Length;
     ChangeBufferSize();
     return *this;
-}
-
-template <typename T>
-std::ostream &operator<<(std::ostream &os, ArrayList<T> &ref)
-{
-    os << "[";
-
-    for (int i = 0; i < ref.Length - 1; i++)
-    {
-        os << ref.Buffer[i] << ", ";
-    }
-
-    os << ref.Buffer[ref.Length - 1] << "]" << std::endl;
-    return os;
-}
-
-template <typename T>
-std::istream &operator>>(std::istream &is, ArrayList<T> &ref)
-{
-    T temp;
-    is >> temp;
-    ref.add(temp);
-    return is;
 }
 
 template <typename T>
@@ -133,7 +123,43 @@ void ArrayList<T>::remove(int index)
     Buffer = temp;
     ChangeBufferSize();
 }
-int main()
+
+template <typename T>
+T ArrayList<T>::pop(int index)
 {
-    ArrayList<std::tuple<int, int, int>> aa;
+    T ret = *this[index];
+
+    return ret;
+}
+
+template <typename T>
+void ArrayList<T>::clear()
+{
+    Length = 0;
+    free(Buffer);
+    Buffer = calloc(Length + 1, ElementSize);
+    ChangeBufferSize();
+}
+
+template <typename T>
+std::ostream &operator<<(std::ostream &os, ArrayList<T> &ref)
+{
+    os << "[";
+
+    for (int i = 0; i < ref.Length - 1; i++)
+    {
+        os << ref.Buffer[i] << ", ";
+    }
+
+    os << ref.Buffer[ref.Length - 1] << "]" << std::endl;
+    return os;
+}
+
+template <typename T>
+std::istream &operator>>(std::istream &is, ArrayList<T> &ref)
+{
+    T temp;
+    is >> temp;
+    ref.add(temp);
+    return is;
 }

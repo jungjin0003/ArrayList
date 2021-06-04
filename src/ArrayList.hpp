@@ -1,7 +1,6 @@
 #pragma once
 
 #include <iostream>
-#include <tuple>
 
 template <typename T>
 class ArrayList
@@ -32,4 +31,6 @@ public:
     
     void add(T Element);
     void remove(int index);
+    T pop(int index);
+    void clear();
 };
